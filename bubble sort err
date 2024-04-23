@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <omp.h>
+using namespace std;
+using namespace std::chrono;
+void bubbleSortParallel(vector<int>& arr) {
+int n = arr.size();
+#pragma omp parallel for
+for (int i = 0; i < n - 1; ++i) {
+for (int j = 0; j < n - i - 1; ++j) {
+if (arr[j] > arr[j + 1]) {
+swap(arr[j], arr[j + 1]);
+}
+}
+}
+}
+int main() {
+// Generate a random array
+vector<int> arr = {12, 11, 13, 5, 6, 7};
+// Measure the time taken for parallel bubble sort
+auto start = high_resolution_clock::now();
+bubbleSortParallel(arr);
+auto stop = high_resolution_clock::now();
+auto duration = duration_cast<microseconds>(stop - start);
+cout << "Time taken for parallel bubble sort: " << duration.count() << " 
+microseconds" << endl;
+// Display sorted array
+cout << "Sorted array: ";
+for (int num : arr) {
+cout << num << " ";
+}
+cout << endl;
+return 0;
+}
